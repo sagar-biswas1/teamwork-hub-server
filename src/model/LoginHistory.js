@@ -15,3 +15,4 @@ const loginHistorySchema = new Schema({
   });
   
   const LoginHistory = mongoose.model('LoginHistory', loginHistorySchema);
+  module.exports = LoginHistory;

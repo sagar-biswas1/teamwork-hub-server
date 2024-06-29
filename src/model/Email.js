@@ -20,3 +20,4 @@ const emailSchema = new Schema({
   
   const Email = mongoose.model('Email', emailSchema);
   
+  module.exports = Email;

@@ -27,4 +27,4 @@ const verificationCodeSchema = new Schema({
   });
   
   const VerificationCode = mongoose.model('VerificationCode', verificationCodeSchema);
-  
+  module.exports = VerificationCode;

@@ -14,7 +14,7 @@ const app = express();
 applyMiddleware(app);
 
 // Define routes
-// app.use(routes);
+app.use(routes);
 
 /**
  * A simple health check endpoint for the application.
@@ -33,7 +33,7 @@ applyMiddleware(app);
  *   "status": "Up"
  * }
  */
-app.get("/api/health", (req, res) => {
+app.get("/api/v1/health", (req, res) => {
   res.status(200).json({
     status: "Up"
   });

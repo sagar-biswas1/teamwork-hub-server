@@ -1,18 +1,16 @@
 
 "openapi": "3.0.3"
 "info":
-  "title": "hotel-mania - Auth Service API"
-  "description": "API for user authentication including registration, login, email validation, token verification, and user role management."
-  "termsOfService": "http://swagger.io/terms/"
+  "title": "team-work hub"
+  "description": "API for team work hub project."
+  
   "contact":
     "email": "mr.oshanbiswas@gmail.com"
-  "license":
-    "name": "Apache 2.0"
-    "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+  
   "version": "1.0.11"
 "servers":
   -
-    "url": "http://localhost:4000/api"
+    "url": "http://localhost:4000/api/v1"
     "description": "Local server"
 "tags":
   -
@@ -139,6 +137,16 @@
                   "message":
                     "type": "string"
                     "example": "Internal server error"
+        "409":
+          "description": "Duplicate content"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "User already exists"
   "/auth/login":
     "post":
       "summary": "User login"
@@ -211,7 +219,7 @@
                     "example": "Internal server error"
   "/auth/verify-email":
     "post":
-      "summary": "Validate email"
+      "summary": "Validate email -[Upcoming]"
       "tags":
         - "Auth"
       "description": "Validate email with a validation code."
@@ -291,7 +299,7 @@
                     "example": "Internal server error"
   "/auth/verify-token":
     "post":
-      "summary": "Verify JWT token"
+      "summary": "Verify JWT token [upcoming]"
       "tags":
         - "Auth"
       "description": "Verify JWT token and return user information."
