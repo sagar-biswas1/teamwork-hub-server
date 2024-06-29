@@ -1,11 +1,11 @@
-const { createContent } = require("../../../../lib/contentService");
+const { createContent } = require("../../../../lib/content");
 const { contentCreationSchema } = require("../validationSchema");
 
 /**
  * Handles the creation of new content.
  *
- * @param  req - The request object containing content data.
- * @param  res - The response object for sending a response.
+ * @param {Request}  req - The request object containing content data.
+ * @param  {Response} - The response object for sending a response.
  * @param  next - The next function to call the next middleware.
  * @returns {Promise<void>} A Promise that resolves once the content is created.
  */
