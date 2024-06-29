@@ -1,0 +1,1183 @@
+
+"openapi": "3.0.3"
+"info":
+  "title": "hotel-mania - Auth Service API"
+  "description": "API for user authentication including registration, login, email validation, token verification, and user role management."
+  "termsOfService": "http://swagger.io/terms/"
+  "contact":
+    "email": "mr.oshanbiswas@gmail.com"
+  "license":
+    "name": "Apache 2.0"
+    "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+  "version": "1.0.11"
+"servers":
+  -
+    "url": "http://localhost:4000/api"
+    "description": "Local server"
+"tags":
+  -
+    "name": "Health"
+    "description": "Checking the health of the app"
+  -
+    "name": "Auth"
+    "description": "Everything about auth"
+  -
+    "name": "Content"
+    "description": "Everything about content"
+  -
+    "name": "Feedback"
+    "description": "Everything about feedback"
+"paths":
+  "/health":
+    "get":
+      "summary": "check health"
+      "tags":
+        - "Health"
+      "operationId": "checkHealth"
+      "responses":
+        "200":
+          "description": "checking health of app"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "status":
+                    "type": "string"
+                    "example": "Up"
+  "/auth/register":
+    "post":
+      "summary": "Register a new user"
+      "tags":
+        - "Auth"
+      "description": "Register a new user and send a confirmation email."
+      "operationId": "registerUser"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "email":
+                  "type": "string"
+                  "format": "email"
+                "password":
+                  "type": "string"
+                  "format": "password"
+                "name":
+                  "type": "string"
+      "responses":
+        "201":
+          "description": "User registered with a confirmation email sent"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "User created. Check your email for verification code"
+                  "user":
+                    "type": "object"
+                    "properties":
+                      "id":
+                        "type": "string"
+                        "example": "clwrlc3qq0000dg3snp13r0yg"
+                      "email":
+                        "type": "string"
+                        "format": "email"
+                        "example": "Fredy_Beier@yahoo.com"
+                      "name":
+                        "type": "string"
+                        "example": "oshan"
+                      "role":
+                        "type": "string"
+                        "example": "User"
+                      "status":
+                        "type": "string"
+                        "example": "PENDING"
+                      "verified":
+                        "type": "boolean"
+                        "example": false
+        "400":
+          "description": "Bad Request"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "errors":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "code":
+                          "type": "string"
+                          "example": "invalid_type"
+                        "expected":
+                          "type": "string"
+                          "example": "string"
+                        "received":
+                          "type": "string"
+                          "example": "undefined"
+                        "path":
+                          "type": "array"
+                          "items":
+                            "type": "string"
+                            "example": "name"
+                        "message":
+                          "type": "string"
+                          "example": "Required"
+        "500":
+          "description": "Internal server error"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Internal server error"
+  "/auth/login":
+    "post":
+      "summary": "User login"
+      "tags":
+        - "Auth"
+      "description": "Authenticate user and return a JSON Web Token (JWT)."
+      "operationId": "loginUser"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "email":
+                  "type": "string"
+                  "format": "email"
+                "password":
+                  "type": "string"
+                  "format": "password"
+      "responses":
+        "200":
+          "description": "Successful login with a JWT returned"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "accessToken":
+                    "type": "string"
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHdybGMzcXEwMDAwZGczc25wMTNyMHlnIiwiZW1haWwiOiJGcmVkeV9CZW0"
+        "400":
+          "description": "Bad Request"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "errors":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "code":
+                          "type": "string"
+                          "example": "invalid_type"
+                        "expected":
+                          "type": "string"
+                          "example": "string"
+                        "received":
+                          "type": "string"
+                          "example": "undefined"
+                        "path":
+                          "type": "array"
+                          "items":
+                            "type": "string"
+                            "example": "name"
+                        "message":
+                          "type": "string"
+                          "example": "Required"
+        "500":
+          "description": "Internal server error"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Internal server error"
+  "/auth/verify-email":
+    "post":
+      "summary": "Validate email"
+      "tags":
+        - "Auth"
+      "description": "Validate email with a validation code."
+      "operationId": "validateEmail"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "email":
+                  "type": "string"
+                  "format": "email"
+                "validationCode":
+                  "type": "string"
+                  "example": 123454
+      "responses":
+        "200":
+          "description": "Email successfully validated"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Email verified successfully"
+        "400":
+          "description": "Bad Request"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "errors":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "code":
+                          "type": "string"
+                          "example": "invalid_type"
+                        "expected":
+                          "type": "string"
+                          "example": "string"
+                        "received":
+                          "type": "string"
+                          "example": "undefined"
+                        "path":
+                          "type": "array"
+                          "items":
+                            "type": "string"
+                            "example": "name"
+                        "message":
+                          "type": "string"
+                          "example": "Required"
+        "404":
+          "description": "not found"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "User not found"
+        "500":
+          "description": "Internal server error"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Internal server error"
+  "/auth/verify-token":
+    "post":
+      "summary": "Verify JWT token"
+      "tags":
+        - "Auth"
+      "description": "Verify JWT token and return user information."
+      "operationId": "verifyToken"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "accessToken":
+                  "type": "string"
+      "responses":
+        "200":
+          "description": "Authorized user"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                  "user":
+                    "type": "object"
+                    "properties":
+                      "id":
+                        "type": "string"
+                        "example": "clwrlc3qq0000dg3snp13r0yg"
+                      "email":
+                        "type": "string"
+                        "format": "email"
+                        "example": "Fredy_Beier@yahoo.com"
+                      "name":
+                        "type": "string"
+                        "example": "oshan"
+                      "role":
+                        "type": "string"
+                        "example": "User"
+                      "status":
+                        "type": "string"
+                        "example": "PENDING"
+                      "verified":
+                        "type": "boolean"
+                        "example": false
+        "400":
+          "description": "Bad Request"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "errors":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "code":
+                          "type": "string"
+                          "example": "invalid_type"
+                        "expected":
+                          "type": "string"
+                          "example": "string"
+                        "received":
+                          "type": "string"
+                          "example": "undefined"
+                        "path":
+                          "type": "array"
+                          "items":
+                            "type": "string"
+                            "example": "accessToken"
+                        "message":
+                          "type": "string"
+                          "example": "Required"
+        "500":
+          "description": "Internal server error"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Internal server error"
+  "/projects/content":
+    "post":
+      "summary": "Create a new content"
+      "tags":
+        - "Content"
+      "security":
+        -
+          "bearerAuth": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "required":
+                - "title"
+                - "createdBy"
+              "properties":
+                "title":
+                  "type": "string"
+                "createdBy":
+                  "type": "string"
+                  "example": "bhjsheueh3412j231231n"
+      "responses":
+        "201":
+          "description": "Content created successfully"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "acknowlwdged":
+                    "type": "boolean"
+                  "insertedId":
+                    "type": "string"
+                    "example": "hdb1b3j1b12jb34j4j4"
+        "400":
+          "description": "Bad Request"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "errors":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "code":
+                          "type": "string"
+                          "example": "invalid_type"
+                        "expected":
+                          "type": "string"
+                          "example": "string"
+                        "received":
+                          "type": "string"
+                          "example": "undefined"
+                        "path":
+                          "type": "array"
+                          "items":
+                            "type": "string"
+                            "example": "accessToken"
+                        "message":
+                          "type": "string"
+                          "example": "Required"
+        "401":
+          "description": "Unauthorized"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Unauthorized"
+        "500":
+          "description": "Internal server error"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Internal server error"
+    "get":
+      "summary": "Get list of documents in a project"
+      "tags":
+        - "Content"
+      "security":
+        -
+          "bearerAuth": []
+      "description": "Fetch a list of contents with pagination details. This route is admin-protected."
+      "operationId": "getAllContents"
+      "responses":
+        "200":
+          "description": "List of contents with pagination details"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "total":
+                    "type": "integer"
+                  "page":
+                    "type": "integer"
+                  "pageSize":
+                    "type": "integer"
+                  "contents":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "_id":
+                          "type": "string"
+                        "title":
+                          "type": "string"
+                        "body":
+                          "type": "string"
+                        "createdBy":
+                          "type": "string"
+                          "example": "bhjsheueh3412j231231n"
+                        "collaborators":
+                          "type": "array"
+                          "example":
+                            - "bhjsheuehdsasdasdasd"
+                        "createdAt":
+                          "type": "string"
+                          "format": "date"
+                          "example": "2024-06-28"
+                        "updatedAt":
+                          "type": "string"
+                          "format": "date"
+                          "example": "2024-06-28"
+        "500":
+          "description": "Internal server error"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Internal server error"
+        "401":
+          "description": "Unauthorized"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Unauthorized"
+  "/projects/content/{id}":
+    "get":
+      "summary": "Get details of a content"
+      "tags":
+        - "Content"
+      "security":
+        -
+          "bearerAuth": []
+      "description": "Retrieve details of a content. This route is protected and requires authorization."
+      "operationId": "getContent"
+      "parameters":
+        -
+          "name": "id"
+          "in": "path"
+          "required": true
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": "Content data with details of the content"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "_id":
+                    "type": "string"
+                    "example": "12m1j2k1j121j3jjjj3"
+                  "title":
+                    "type": "string"
+                    "example": "hello world"
+                  "body":
+                    "type": "string"
+                  "collaborators":
+                    "type": "array"
+                    "example":
+                      - "bhjsheuehdsasdasdasd"
+                  "createdAt":
+                    "type": "string"
+                    "format": "date"
+                    "example": "2024-06-28"
+                  "updatedAt":
+                    "type": "string"
+                    "format": "date"
+                    "example": "2024-06-28"
+                  "createdBy":
+                    "type": "string"
+                    "example": "sjsjajj2j3j22j3j3"
+        "404":
+          "description": "not found"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "not found"
+        "500":
+          "description": "Internal server error"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Internal server error"
+    "put":
+      "summary": "update a content"
+      "tags":
+        - "Content"
+      "security":
+        -
+          "bearerAuth": []
+      "parameters":
+        -
+          "name": "id"
+          "in": "path"
+          "required": true
+          "schema":
+            "type": "string"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "title":
+                  "type": "string"
+                "body":
+                  "type": "string"
+                "collaborators":
+                  "type": "array"
+                  "example":
+                    - "bhjsheuehdsasdasdasd"
+      "responses":
+        "200":
+          "description": "Content updated successfully"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "acknowlwdged":
+                    "type": "boolean"
+                  "updatedId":
+                    "type": "string"
+                    "example": "hdb1b3j1b12jb34j4j4"
+                  "matchedCount":
+                    "type": "number"
+                    "example": 1
+                  "updatedCount":
+                    "type": "number"
+                    "example": 1
+        "400":
+          "description": "Bad Request"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "errors":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "code":
+                          "type": "string"
+                          "example": "invalid_type"
+                        "expected":
+                          "type": "string"
+                          "example": "string"
+                        "received":
+                          "type": "string"
+                          "example": "undefined"
+                        "path":
+                          "type": "array"
+                          "items":
+                            "type": "string"
+                            "example": "accessToken"
+                        "message":
+                          "type": "string"
+                          "example": "Required"
+        "401":
+          "description": "Unauthorized"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Unauthorized"
+        "500":
+          "description": "Internal server error"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Internal server error"
+        "404":
+          "description": "not found"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "not found"
+    "delete":
+      "summary": "Delete a content"
+      "tags":
+        - "Content"
+      "security":
+        -
+          "bearerAuth": []
+      "description": "Delete a Content by ID. This route is admin-protected."
+      "operationId": "deleteContent"
+      "parameters":
+        -
+          "name": "id"
+          "in": "path"
+          "required": true
+          "schema":
+            "type": "string"
+      "responses":
+        "204":
+          "description": "Content data with details of the content"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "_id":
+                    "type": "string"
+                    "example": "12m1j2k1j121j3jjjj3"
+                  "acknowledged":
+                    "type": "boolean"
+                  "deletedCount":
+                    "type": "number"
+                    "example": 1
+        "404":
+          "description": "Document not found"
+        "401":
+          "description": "Unauthorized"
+  "/contents/feedback":
+    "post":
+      "summary": "Add feedback to a document"
+      "tags":
+        - "Feedback"
+      "security":
+        -
+          "bearerAuth": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "required":
+                - "user"
+                - "body"
+                - "content"
+              "properties":
+                "user":
+                  "type": "string"
+                  "example": "bhjsheueh3412j231231n"
+                "body":
+                  "type": "string"
+                "content":
+                  "type": "string"
+                  "example": "12m1j2k1j121j3jjjj3"
+      "responses":
+        "201":
+          "description": "Feedback added successfully"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "acknowlwdged":
+                    "type": "boolean"
+                  "insertedId":
+                    "type": "string"
+                    "example": "hdb1b3j1b12jb34j4j4"
+        "400":
+          "description": "Bad Request"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "errors":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "code":
+                          "type": "string"
+                          "example": "invalid_type"
+                        "expected":
+                          "type": "string"
+                          "example": "string"
+                        "received":
+                          "type": "string"
+                          "example": "undefined"
+                        "path":
+                          "type": "array"
+                          "items":
+                            "type": "string"
+                            "example": "user"
+                        "message":
+                          "type": "string"
+                          "example": "Required"
+        "401":
+          "description": "Unauthorized"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Unauthorized"
+        "500":
+          "description": "Internal server error"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Internal server error"
+    "get":
+      "summary": "Get feedback for a document"
+      "tags":
+        - "Feedback"
+      "security":
+        -
+          "bearerAuth": []
+      "description": "Fetch a list of feedback for a specific document. This route is protected."
+      "operationId": "getFeedback"
+      "parameters":
+        -
+          "name": "id"
+          "in": "query"
+          "required": true
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": "List of feedback"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "total":
+                    "type": "integer"
+                  "feedbacks":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "_id":
+                          "type": "string"
+                        "user":
+                          "type": "string"
+                          "example": "bhjsheueh3412j231231n"
+                        "body":
+                          "type": "string"
+                        "content":
+                          "type": "string"
+                          "example": "12m1j2k1j121j3jjjj3"
+                        "createdAt":
+                          "type": "string"
+                          "format": "date"
+                          "example": "2024-06-28"
+                        "updatedAt":
+                          "type": "string"
+                          "format": "date"
+                          "example": "2024-06-28"
+        "500":
+          "description": "Internal server error"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Internal server error"
+        "401":
+          "description": "Unauthorized"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Unauthorized"
+  "/contents/feedback/{id}":
+    "get":
+      "summary": "Get details of a feedback"
+      "tags":
+        - "Feedback"
+      "security":
+        -
+          "bearerAuth": []
+      "description": "Retrieve details of a feedback. This route is protected and requires authorization."
+      "operationId": "getFeedbackDetails"
+      "parameters":
+        -
+          "name": "id"
+          "in": "path"
+          "required": true
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": "Feedback data with details of the feedback"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "_id":
+                    "type": "string"
+                    "example": "12m1j2k1j121j3jjjj3"
+                  "user":
+                    "type": "string"
+                    "example": "bhjsheueh3412j231231n"
+                  "body":
+                    "type": "string"
+                  "content":
+                    "type": "string"
+                    "example": "12m1j2k1j121j3jjjj3"
+                  "createdAt":
+                    "type": "string"
+                    "format": "date"
+                    "example": "2024-06-28"
+                  "updatedAt":
+                    "type": "string"
+                    "format": "date"
+                    "example": "2024-06-28"
+        "404":
+          "description": "not found"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "not found"
+        "500":
+          "description": "Internal server error"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Internal server error"
+    "put":
+      "summary": "Update a feedback"
+      "tags":
+        - "Feedback"
+      "security":
+        -
+          "bearerAuth": []
+      "parameters":
+        -
+          "name": "id"
+          "in": "path"
+          "required": true
+          "schema":
+            "type": "string"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "body":
+                  "type": "string"
+      "responses":
+        "200":
+          "description": "Feedback updated successfully"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "acknowlwdged":
+                    "type": "boolean"
+                  "updatedId":
+                    "type": "string"
+                    "example": "hdb1b3j1b12jb34j4j4"
+                  "matchedCount":
+                    "type": "number"
+                    "example": 1
+                  "updatedCount":
+                    "type": "number"
+                    "example": 1
+        "400":
+          "description": "Bad Request"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "errors":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "code":
+                          "type": "string"
+                          "example": "invalid_type"
+                        "expected":
+                          "type": "string"
+                          "example": "string"
+                        "received":
+                          "type": "string"
+                          "example": "undefined"
+                        "path":
+                          "type": "array"
+                          "items":
+                            "type": "string"
+                            "example": "body"
+                        "message":
+                          "type": "string"
+                          "example": "Required"
+        "401":
+          "description": "Unauthorized"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Unauthorized"
+        "500":
+          "description": "Internal server error"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Internal server error"
+        "404":
+          "description": "not found"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "not found"
+    "delete":
+      "summary": "Delete a feedback"
+      "tags":
+        - "Feedback"
+      "security":
+        -
+          "bearerAuth": []
+      "description": "Delete a Feedback by ID. This route is protected."
+      "operationId": "deleteFeedback"
+      "parameters":
+        -
+          "name": "id"
+          "in": "path"
+          "required": true
+          "schema":
+            "type": "string"
+      "responses":
+        "204":
+          "description": "Content data with details of the content"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "_id":
+                    "type": "string"
+                    "example": "12m1j2k1j121j3jjjj3"
+                  "acknowledged":
+                    "type": "boolean"
+                  "deletedCount":
+                    "type": "number"
+                    "example": 1
+        "404":
+          "description": "Feedback not found"
+        "401":
+          "description": "Unauthorized"
+"components":
+  "securitySchemes":
+    "bearerAuth":
+      "type": "http"
+      "scheme": "bearer"
+  "schemas":
+    "DocumentCreation":
+      "type": "object"
+      "properties":
+        "acknowlwdged":
+          "type": "boolean"
+        "insertedId":
+          "type": "string"
+          "example": "hdb1b3j1b12jb34j4j4"
+    "DocumentUpdate":
+      "type": "object"
+      "properties":
+        "acknowlwdged":
+          "type": "boolean"
+        "updatedId":
+          "type": "string"
+          "example": "hdb1b3j1b12jb34j4j4"
+        "matchedCount":
+          "type": "number"
+          "example": 1
+        "updatedCount":
+          "type": "number"
+          "example": 1
+    "User":
+      "type": "object"
+      "properties":
+        "id":
+          "type": "string"
+          "example": "clwrlc3qq0000dg3snp13r0yg"
+        "email":
+          "type": "string"
+          "format": "email"
+          "example": "Fredy_Beier@yahoo.com"
+        "name":
+          "type": "string"
+          "example": "oshan"
+        "role":
+          "type": "string"
+          "example": "User"
+        "status":
+          "type": "string"
+          "example": "PENDING"
+        "verified":
+          "type": "boolean"
+          "example": false
+  "responses":
+    "InternalServerError":
+      "description": "Internal server error"
+      "content":
+        "application/json":
+          "schema":
+            "type": "object"
+            "properties":
+              "message":
+                "type": "string"
+                "example": "Internal server error"
+    "Unauthorized":
+      "description": "Unauthorized"
+      "content":
+        "application/json":
+          "schema":
+            "type": "object"
+            "properties":
+              "message":
+                "type": "string"
+                "example": "Unauthorized"
+    "notFound":
+      "description": "not found"
+      "content":
+        "application/json":
+          "schema":
+            "type": "object"
+            "properties":
+              "message":
+                "type": "string"
+                "example": "not found"
