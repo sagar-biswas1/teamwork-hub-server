@@ -1,13 +1,13 @@
-const findAll = require('./findAll')
+const findAll = require('./find')
 const create = require('./create')
-const findByID= require('./findSingleItem')
-const updateItem= require("./updateItem")
-const removeItem= require("./removeItem")
+const findByID= require('./findById')
+const updateByID= require("./update")
+const removeContentByID= require("./delete")
 
 module.exports ={
     findAll,
     create,
     findByID,
-    updateItem,
-    removeItem
+    updateByID,
+    removeContentByID
 }

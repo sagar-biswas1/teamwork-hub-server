@@ -37,9 +37,16 @@ const findAll = async ({ page = defaults.page, limit = defaults.limit }) => {
       .populate({ path: "createdBy", select: "name" })
       .skip(skip)
       .limit(limit);
+    // Get the total count of content
+    const totalContents = await Content.countDocuments({});
+    const totalPages = Math.ceil(totalContents / limit);
 
-    // Map the content documents to return clean data
-    return contents.map((content) => ({ ...content._doc }));
+    return {
+      contents: contents.map((content) => ({ ...content._doc })),
+      totalContents,
+      totalPages,
+      currentPage: page,
+    };
   } catch (error) {
     console.error("Error fetching content:", error);
     throw new Error("Error fetching content");
@@ -93,7 +100,7 @@ const deleteById = async (id) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid content ID format" });
     }
-    
+
     // Delete content from the database by ID
     await Content.findByIdAndDelete(id);
     return { message: "Content deleted successfully" };
@@ -128,12 +135,18 @@ const updateById = async (id, contentData) => {
     // Destructure contentData
     const { title, body, collaborators } = contentData;
 
+    const updateDoc = { title, body };
+    // Handle collaborators array
+    if (collaborators && collaborators.length > 0) {
+      updateDoc.$addToSet = {
+        collaborators: { $each: collaborators },
+      };
+    }
     // Update content in the database by ID
-    const updatedContent = await Content.findByIdAndUpdate(
-      id,
-      { title, body, collaborators },
-      { new: true, runValidators: true }
-    );
+    const updatedContent = await Content.findByIdAndUpdate(id, updateDoc, {
+      new: true,
+      runValidators: true,
+    });
 
     // Return the updated content or null if not found
     return updatedContent;
@@ -143,4 +156,4 @@ const updateById = async (id, contentData) => {
   }
 };
 
-module.exports = { createContent, findAll, findById, deleteById,updateById };
+module.exports = { createContent, findAll, findById, deleteById, updateById };

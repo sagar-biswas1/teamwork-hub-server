@@ -1,4 +1,4 @@
-const { deleteById } = require("../../../../lib/content");
+const { deleteById,findById } = require("../../../../lib/content");
 
 /**
  * Delete a content item by its ID.
@@ -29,3 +29,5 @@ const deleteContentById = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+module.exports = deleteContentById;

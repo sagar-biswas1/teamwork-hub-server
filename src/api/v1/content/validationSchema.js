@@ -11,9 +11,9 @@ const contentCreationSchema = z.object({
 });
 
 const updateContentSchema = z.object({
-  title: z.string().min(1).max(100),
-  body: z.string().min(10).max(1000),
-  collaborators: z.array(z.string()),
+  title: z.string().min(1).max(100).optional(),
+  body: z.string().min(10).max(1000).optional(),
+  collaborators: z.array(z.string()).optional(),
 });
 
 module.exports = {

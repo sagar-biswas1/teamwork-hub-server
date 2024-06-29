@@ -606,7 +606,7 @@
                   "message":
                     "type": "string"
                     "example": "Internal server error"
-    "put":
+    "patch":
       "summary": "update a content"
       "tags":
         - "Content"
@@ -749,7 +749,92 @@
           "description": "Document not found"
         "401":
           "description": "Unauthorized"
-  "/contents/feedback":
+  "/content/feedback":
+    "get":
+      "summary": "Get feedback for a document"
+      "tags":
+        - "Feedback"
+      "security":
+        -
+          "bearerAuth": []
+      "description": "Fetch a list of feedback for a specific document. This route is protected."
+      "operationId": "getFeedback"
+      "parameters":
+        -
+          "name": "contentID"
+          "in": "query"
+          "required": true
+          "schema":
+            "type": "string"
+            "example": "12m1j2k1j121j3jjjj"
+        -
+          "name": "page"
+          "in": "query"
+          "required": false
+          "schema":
+            "type": "string"
+            "example": "1"
+        -
+          "name": "limit"
+          "in": "query"
+          "required": false
+          "schema":
+            "type": "string"
+            "example": "10"
+      "responses":
+        "200":
+          "description": "List of feedback"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "total":
+                    "type": "integer"
+                  "feedbacks":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "_id":
+                          "type": "string"
+                        "user":
+                          "type": "string"
+                          "example": "bhjsheueh3412j231231n"
+                        "body":
+                          "type": "string"
+                        "content":
+                          "type": "string"
+                          "example": "12m1j2k1j121j3jjjj3"
+                        "createdAt":
+                          "type": "string"
+                          "format": "date"
+                          "example": "2024-06-28"
+                        "updatedAt":
+                          "type": "string"
+                          "format": "date"
+                          "example": "2024-06-28"
+        "500":
+          "description": "Internal server error"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Internal server error"
+        "401":
+          "description": "Unauthorized"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "Unauthorized"
+  "/content/feedback/{id}":
     "post":
       "summary": "Add feedback to a document"
       "tags":
@@ -765,13 +850,13 @@
               "type": "object"
               "required":
                 - "user"
-                - "body"
+                - "feedbackText"
                 - "content"
               "properties":
                 "user":
                   "type": "string"
                   "example": "bhjsheueh3412j231231n"
-                "body":
+                "feedbackText":
                   "type": "string"
                 "content":
                   "type": "string"
@@ -839,76 +924,6 @@
                     "type": "string"
                     "example": "Internal server error"
     "get":
-      "summary": "Get feedback for a document"
-      "tags":
-        - "Feedback"
-      "security":
-        -
-          "bearerAuth": []
-      "description": "Fetch a list of feedback for a specific document. This route is protected."
-      "operationId": "getFeedback"
-      "parameters":
-        -
-          "name": "id"
-          "in": "query"
-          "required": true
-          "schema":
-            "type": "string"
-      "responses":
-        "200":
-          "description": "List of feedback"
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
-                "properties":
-                  "total":
-                    "type": "integer"
-                  "feedbacks":
-                    "type": "array"
-                    "items":
-                      "type": "object"
-                      "properties":
-                        "_id":
-                          "type": "string"
-                        "user":
-                          "type": "string"
-                          "example": "bhjsheueh3412j231231n"
-                        "body":
-                          "type": "string"
-                        "content":
-                          "type": "string"
-                          "example": "12m1j2k1j121j3jjjj3"
-                        "createdAt":
-                          "type": "string"
-                          "format": "date"
-                          "example": "2024-06-28"
-                        "updatedAt":
-                          "type": "string"
-                          "format": "date"
-                          "example": "2024-06-28"
-        "500":
-          "description": "Internal server error"
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
-                "properties":
-                  "message":
-                    "type": "string"
-                    "example": "Internal server error"
-        "401":
-          "description": "Unauthorized"
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
-                "properties":
-                  "message":
-                    "type": "string"
-                    "example": "Unauthorized"
-  "/contents/feedback/{id}":
-    "get":
       "summary": "Get details of a feedback"
       "tags":
         - "Feedback"
@@ -971,7 +986,7 @@
                   "message":
                     "type": "string"
                     "example": "Internal server error"
-    "put":
+    "patch":
       "summary": "Update a feedback"
       "tags":
         - "Feedback"
@@ -992,7 +1007,7 @@
             "schema":
               "type": "object"
               "properties":
-                "body":
+                "feedbackText":
                   "type": "string"
       "responses":
         "200":

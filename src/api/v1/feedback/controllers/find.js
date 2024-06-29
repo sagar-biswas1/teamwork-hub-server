@@ -1,0 +1,28 @@
+const { findFeedbacksByContentID } = require("../../../../lib/feedback");
+
+/**
+ * Get feedback for a document.
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+const getFeedbacksByDocID = async (req, res) => {
+  try {
+    const { page, limit, contentID } = req.query;
+    console.log({ page, limit, contentID });
+    if (!contentID) {
+      return res.status(400).json({ message: "Content ID is required" });
+    }
+    const feedback = await findFeedbacksByContentID(contentID, {
+      page: parseInt(page),
+      limit: parseInt(limit),
+    });
+
+    return res.status(200).json(feedback);
+  } catch (error) {
+    console.error("Error getting feedback:", error);
+    res.status(400).json({ message: "Error getting feedback", error });
+  }
+};
+
+module.exports = getFeedbacksByDocID;

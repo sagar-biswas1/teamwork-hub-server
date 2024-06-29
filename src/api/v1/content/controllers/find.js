@@ -1,4 +1,4 @@
-const { findAll:finAllContent } = require("../../../../lib/content");
+const { findAll: findAllContent } = require("../../../../lib/content");
 /**
  * This function handles the GET request to '/content' endpoint.
  * It retrieves all content documents from the database and sends them as a response.
@@ -10,10 +10,10 @@ const { findAll:finAllContent } = require("../../../../lib/content");
  */
 const findAll = async (req, res, next) => {
   try {
-    const page = req.query.page || defaults.page;
-    const limit = req.query.limit || defaults.limit;
+    const page = req.query.page;
+    const limit = req.query.limit;
     // Fetch all content documents from the database
-    const contentList = await finAllContent({ page, limit });
+    const contentList = await findAllContent({ page, limit });
     // Send a 200 OK status with the content list as JSON
     res.status(200).json(contentList);
   } catch (error) {
