@@ -146,8 +146,8 @@ const updateById = async (id, contentData) => {
     const updatedContent = await Content.findByIdAndUpdate(id, updateDoc, {
       new: true,
       runValidators: true,
-    });
-
+    }).populate({ path: "collaborators", select: "name" })
+    // cupdatedContent.populate({ path: "collaborators", select: "name" });
     // Return the updated content or null if not found
     return updatedContent;
   } catch (error) {

@@ -13,7 +13,10 @@ const findAll = async (req, res, next) => {
     const page = req.query.page;
     const limit = req.query.limit;
     // Fetch all content documents from the database
-    const contentList = await findAllContent({ page, limit });
+    const contentList = await findAllContent({
+      page: parseInt(page),
+      limit: parseInt(limit),
+    });
     // Send a 200 OK status with the content list as JSON
     res.status(200).json(contentList);
   } catch (error) {

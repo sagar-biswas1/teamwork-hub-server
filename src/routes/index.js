@@ -7,6 +7,7 @@ const { controllers: feedbackControllers } = require("../api/v1/feedback");
 // routing for authentication module
 router.route("/api/v1/auth/register").post(authControllers.registration);
 router.route("/api/v1/auth/login").post(authControllers.login);
+router.route("/api/v1/auth/verify-token").post(authControllers.verifyToken);
 
 //routing for content module
 router

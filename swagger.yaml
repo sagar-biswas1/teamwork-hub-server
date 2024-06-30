@@ -1,29 +1,23 @@
-
 "openapi": "3.0.3"
 "info":
   "title": "team-work hub"
   "description": "API for team work hub project."
-  
+
   "contact":
     "email": "mr.oshanbiswas@gmail.com"
-  
+
   "version": "1.0.11"
 "servers":
-  -
-    "url": "http://localhost:4000/api/v1"
+  - "url": "http://localhost:4000/api/v1"
     "description": "Local server"
 "tags":
-  -
-    "name": "Health"
+  - "name": "Health"
     "description": "Checking the health of the app"
-  -
-    "name": "Auth"
+  - "name": "Auth"
     "description": "Everything about auth"
-  -
-    "name": "Content"
+  - "name": "Content"
     "description": "Everything about content"
-  -
-    "name": "Feedback"
+  - "name": "Feedback"
     "description": "Everything about feedback"
 "paths":
   "/health":
@@ -390,8 +384,7 @@
       "tags":
         - "Content"
       "security":
-        -
-          "bearerAuth": []
+        - "bearerAuth": []
       "requestBody":
         "required": true
         "content":
@@ -474,8 +467,20 @@
       "tags":
         - "Content"
       "security":
-        -
-          "bearerAuth": []
+        - "bearerAuth": []
+      "parameters":
+        - "name": "page"
+          "in": "query"
+          "required": false
+          "schema":
+            "type": "string"
+            "example": "1"
+        - "name": "limit"
+          "in": "query"
+          "required": false
+          "schema":
+            "type": "string"
+            "example": "10"
       "description": "Fetch a list of contents with pagination details. This route is admin-protected."
       "operationId": "getAllContents"
       "responses":
@@ -544,13 +549,11 @@
       "tags":
         - "Content"
       "security":
-        -
-          "bearerAuth": []
+        - "bearerAuth": []
       "description": "Retrieve details of a content. This route is protected and requires authorization."
       "operationId": "getContent"
       "parameters":
-        -
-          "name": "id"
+        - "name": "id"
           "in": "path"
           "required": true
           "schema":
@@ -611,11 +614,9 @@
       "tags":
         - "Content"
       "security":
-        -
-          "bearerAuth": []
+        - "bearerAuth": []
       "parameters":
-        -
-          "name": "id"
+        - "name": "id"
           "in": "path"
           "required": true
           "schema":
@@ -718,13 +719,11 @@
       "tags":
         - "Content"
       "security":
-        -
-          "bearerAuth": []
+        - "bearerAuth": []
       "description": "Delete a Content by ID. This route is admin-protected."
       "operationId": "deleteContent"
       "parameters":
-        -
-          "name": "id"
+        - "name": "id"
           "in": "path"
           "required": true
           "schema":
@@ -755,27 +754,23 @@
       "tags":
         - "Feedback"
       "security":
-        -
-          "bearerAuth": []
+        - "bearerAuth": []
       "description": "Fetch a list of feedback for a specific document. This route is protected."
       "operationId": "getFeedback"
       "parameters":
-        -
-          "name": "contentID"
+        - "name": "contentID"
           "in": "query"
           "required": true
           "schema":
             "type": "string"
             "example": "12m1j2k1j121j3jjjj"
-        -
-          "name": "page"
+        - "name": "page"
           "in": "query"
           "required": false
           "schema":
             "type": "string"
             "example": "1"
-        -
-          "name": "limit"
+        - "name": "limit"
           "in": "query"
           "required": false
           "schema":
@@ -840,8 +835,7 @@
       "tags":
         - "Feedback"
       "security":
-        -
-          "bearerAuth": []
+        - "bearerAuth": []
       "requestBody":
         "required": true
         "content":
@@ -928,13 +922,11 @@
       "tags":
         - "Feedback"
       "security":
-        -
-          "bearerAuth": []
+        - "bearerAuth": []
       "description": "Retrieve details of a feedback. This route is protected and requires authorization."
       "operationId": "getFeedbackDetails"
       "parameters":
-        -
-          "name": "id"
+        - "name": "id"
           "in": "path"
           "required": true
           "schema":
@@ -991,11 +983,9 @@
       "tags":
         - "Feedback"
       "security":
-        -
-          "bearerAuth": []
+        - "bearerAuth": []
       "parameters":
-        -
-          "name": "id"
+        - "name": "id"
           "in": "path"
           "required": true
           "schema":
@@ -1092,13 +1082,11 @@
       "tags":
         - "Feedback"
       "security":
-        -
-          "bearerAuth": []
+        - "bearerAuth": []
       "description": "Delete a Feedback by ID. This route is protected."
       "operationId": "deleteFeedback"
       "parameters":
-        -
-          "name": "id"
+        - "name": "id"
           "in": "path"
           "required": true
           "schema":
