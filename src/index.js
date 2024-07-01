@@ -33,7 +33,7 @@ const main = async () => {
     });
   } catch (e) {
     // console.log(e)
-    appLogger.error(JSON.stringify(e));
+    // appLogger.error(JSON.stringify(e));
   }
 };
 

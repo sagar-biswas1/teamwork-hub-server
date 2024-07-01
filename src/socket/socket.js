@@ -1,14 +1,20 @@
-const {
-  setSessionInRedis,
-  cacheDocument,
-  getMycacheDocument,
-} = require("../redis/redisUtils");
+const { setSessionInRedis, cacheDocument,getMycacheDocument } = require("../redis/redisUtils");
 
 const lodash = require("lodash");
 const contentService = require("../lib/content");
-require("../redis/key-expires");
 
+const userSocketMap = {};
 const rooms = {};
+
+
+/**
+ * Get the socket ID for a given user ID.
+ * @param {string} receiverId - The ID of the receiver.
+ * @returns {string} The socket ID of the receiver.
+ */
+const getReceiverSocketId = (receiverId) => {
+  return userSocketMap[receiverId];
+};
 
 /**
  * Sets up the Socket.IO server and handles socket events.
@@ -20,13 +26,13 @@ function setupSocket(io) {
 
     socket.on("getDocumentId", async (documentId) => {
       //setting session in redis
-      await setSessionInRedis(documentId);
+      setSessionInRedis(documentId);
 
       let contentDoc;
       contentDoc = await getMycacheDocument(documentId);
       if (!contentDoc) {
         contentDoc = await contentService.findById(documentId);
-        await cacheDocument(documentId, contentDoc);
+        cacheDocument(documentId, contentDoc);
       }
       socket.join(documentId);
       socket.emit("loadDocument", contentDoc);
@@ -66,16 +72,15 @@ function setupSocket(io) {
       // Create a debounced version of the documentEdited handler
       const debouncedDocumentEdited = lodash.debounce(
         async ({ projectId, code, collaborators }) => {
-          await setSessionInRedis(projectId);
           await handleDocumentEdited(
             socket,
-            // documentId,
-            projectId,
+            documentId,
+            // projectId,
             code,
             collaborators
           );
         },
-        1000 // Adjust the debounce delay (in milliseconds) as needed
+        700 // Adjust the debounce delay (in milliseconds) as needed
       );
 
       socket.on("documentEdited", debouncedDocumentEdited);
@@ -123,24 +128,18 @@ async function handleDocumentEdited(
   code,
   collaborators
 ) {
+  console.log({ documentId });
   let contentDoc;
   contentDoc = await getMycacheDocument(documentId);
   if (!contentDoc) {
     contentDoc = await contentService.findById(documentId);
+    cacheDocument(documentId, contentDoc);
   }
 
-  contentDoc.body = code;
-  collaborators.forEach((collaborator) => {
-    if (!contentDoc.collaborators.includes(collaborator)) {
-      contentDoc.collaborators.push(collaborator);
-    }
+  const updatedContent = await contentService.updateById(documentId, {
+    body: code,
+    collaborators,
   });
-
-  // const updatedContent = await contentService.updateById(documentId, {
-  //   body: code,
-  //   collaborators,
-  // });
-  await cacheDocument(documentId, contentDoc);
 
   socket.broadcast.to(documentId).emit("documentUpdated", {
     projectId: documentId,
