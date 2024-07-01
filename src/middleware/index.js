@@ -20,7 +20,7 @@ const applyMiddleware = (app) => {
   app.use(cors());
 
   // Use custom info logger middleware
-  app.use(infoLogger);
+  // app.use(infoLogger);
 
   // Check if Swagger should be enabled
   const enableSwagger = process.env.ENABLE_SWAGGER === "true";

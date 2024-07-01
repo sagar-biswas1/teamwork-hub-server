@@ -105,7 +105,7 @@ function setupSocket(io) {
       socket.join(documentId);
       socket.emit("loadDocument", data);
 
-      // New experimental code
+      
       const userId = socket.handshake.query.userId;
       console.log("userId", userId);
 
@@ -118,6 +118,14 @@ function setupSocket(io) {
         users: Array.from(rooms[documentId]),
         size: rooms[documentId].size,
       });
+      // socket for chating messages
+      socket.on("deliverMessage",({ chatRoomId, message }) => {
+        console.log("asdasd",{ chatRoomId, message })
+        io.to(chatRoomId).emit("receiveMessage", {
+          chatRoomId,
+          message,
+        });
+      })
 
       // Handle user disconnect
       socket.on("disconnect", () => {
