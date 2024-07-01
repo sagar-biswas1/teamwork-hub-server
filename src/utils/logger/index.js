@@ -69,8 +69,8 @@ function logger(dynamicLabel) {
     level: "info",
     format: combine(label({ label: dynamicLabel?.label || "info" })),
     transports: [
-      consoleTransport,
-      infoFileTransport,
+      // consoleTransport,
+      // infoFileTransport,
       errorFileTransport,
       // mongoDBTransport,
     ],
@@ -80,8 +80,8 @@ function logger(dynamicLabel) {
 const expressWinstonLogger = (level) =>
   expressWinston.logger({
     transports: [
-      consoleTransport,
-      infoFileTransport,
+      // consoleTransport,
+      // infoFileTransport,
       errorFileTransport,
     ],
     level: level || "info",

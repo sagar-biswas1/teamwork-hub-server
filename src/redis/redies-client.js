@@ -13,11 +13,11 @@ const redis = new Redis(config.redisURL);
 
 // Event listeners for connection status
 redis.on("connect", () => {
-  console.log("Redis client connected");
+  // console.log("Redis client connected");
 });
 
 redis.on("ready", () => {
-  console.log("Redis client ready");
+  // console.log("Redis client ready");
 });
 
 redis.on("error", (err) => {

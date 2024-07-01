@@ -3,6 +3,7 @@ const router = require("express").Router();
 const { controllers: authControllers } = require("../api/v1/authentication");
 const { controllers: contentControllers } = require("../api/v1/content");
 const { controllers: feedbackControllers } = require("../api/v1/feedback");
+const verifyToken = require("../middleware/verifyToken");
 
 // routing for authentication module
 router.route("/api/v1/auth/register").post(authControllers.registration);
@@ -12,25 +13,25 @@ router.route("/api/v1/auth/verify-token").post(authControllers.verifyToken);
 //routing for content module
 router
   .route("/api/v1/projects/content")
-  .post(contentControllers.create)
-  .get(contentControllers.findAll);
+  .post(verifyToken, contentControllers.create)
+  .get(verifyToken, contentControllers.findAll);
 
 router
   .route("/api/v1/projects/content/:id")
-  .get(contentControllers.findByID)
-  .patch(contentControllers.updateByID)
-  .delete(contentControllers.removeContentByID);
+  .get(verifyToken, contentControllers.findByID)
+  .patch(verifyToken, contentControllers.updateByID)
+  .delete(verifyToken, contentControllers.removeContentByID);
 
 //routing for feedbacks
 router
   .route("/api/v1/content/feedback")
-  .get(feedbackControllers.findFeedbacksContentId)
-  
+  .get(verifyToken, feedbackControllers.findFeedbacksContentId);
+
 router
   .route("/api/v1/content/feedback/:id")
-  .post(feedbackControllers.create)
-  .get(feedbackControllers.findByID)
-  .patch(feedbackControllers.updateByID)
-  .delete(feedbackControllers.removeFeedbackByID);
+  .post(verifyToken, feedbackControllers.create)
+  .get(verifyToken, feedbackControllers.findByID)
+  .patch(verifyToken, feedbackControllers.updateByID)
+  .delete(verifyToken, feedbackControllers.removeFeedbackByID);
 
 module.exports = router;

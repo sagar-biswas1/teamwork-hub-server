@@ -2,6 +2,8 @@
 
 #### This is the backend server for the TeamHub project, built with Node.js and Express and Socket io. TeamHub is a collaborative platform for project management, document collaboration, and feedback collection.
 
+[client-side-repository](https://github.com/sagar-biswas1/teamwork-hub-client)
+
 ## Table of Contents
 
 - [Features](#features)
