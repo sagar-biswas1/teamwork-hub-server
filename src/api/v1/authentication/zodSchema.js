@@ -16,4 +16,8 @@ const UserLoginSchema = z.object({
 });
 
 
-module.exports = {UserCreateSchema,UserLoginSchema}
+// Define the Zod schema for accessToken
+const AccessTokenSchema = z.string().min(1).max(700); 
+
+
+module.exports = {UserCreateSchema,UserLoginSchema,AccessTokenSchema}

@@ -2,7 +2,6 @@ require("dotenv").config();
 const { Redis } = require("ioredis");
 const config = require("../config/defaults");
 
-
 // const config = {
 //   url: process.env.REDIS_HOST || "localhost",
 //   port: process.env.REDIS_PORT || 6379,
@@ -22,7 +21,7 @@ redis.on("ready", () => {
 });
 
 redis.on("error", (err) => {
-  console.error("Redis client error:", err);
+  //console.error("Redis client error:", err);
 });
 
 redis.on("end", () => {

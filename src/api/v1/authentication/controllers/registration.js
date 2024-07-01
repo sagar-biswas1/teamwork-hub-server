@@ -1,10 +1,5 @@
-const {
-  generateVerificationCode,
-  createUser,
-} = require("../../../../lib/authentication");
-const { badRequest } = require("../../../../utils/error");
+const { createUser } = require("../../../../lib/authentication");
 const { UserCreateSchema } = require("../zodSchema");
-const User = require("../../../../model/User");
 const bcrypt = require("bcryptjs");
 const { findUserByEmail } = require("../../../../lib/user");
 
@@ -32,7 +27,7 @@ const userRegistration = async (req, res, next) => {
     });
 
     if (!parsedBody.success) {
-      throw badRequest(parsedBody.error.errors);
+      return res.status(400).json({ errors: parsedBody.error.errors });
     }
 
     // Check if the user already exists
@@ -60,7 +55,7 @@ const userRegistration = async (req, res, next) => {
       user: newUser,
     });
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error("Error creating user:", error.message);
     next(error);
   }
 };

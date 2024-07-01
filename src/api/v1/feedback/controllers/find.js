@@ -1,5 +1,5 @@
 const { findFeedbacksByContentID } = require("../../../../lib/feedback");
-
+const config = require("../../../../config/defaults");
 /**
  * Get feedback for a document.
  *
@@ -8,7 +8,7 @@ const { findFeedbacksByContentID } = require("../../../../lib/feedback");
  */
 const getFeedbacksByDocID = async (req, res) => {
   try {
-    const { page, limit, contentID } = req.query;
+    const { page=config.page, limit=config.limit, contentID } = req.query;
     if (!contentID) {
       return res.status(400).json({ message: "Content ID is required" });
     }

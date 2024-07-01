@@ -13,24 +13,23 @@ redis.subscribe(CHANNEl_KEY);
 
 redis.on("message", async (channel, message) => {
   if (channel === CHANNEl_KEY) {
-    console.log({ channel, message });
     const sessionId = message.replace("session:", "");
 
     const cachedContent = await getMycacheDocument(sessionId);
-    console.log(20, cachedContent);
+
     if (cachedContent) {
       const { title, body, collaborators } = cachedContent;
-      console.log({ title, body, collaborators });
+
       const updatedContent = await updateById(sessionId, {
         title,
         body,
         collaborators,
       });
 
-      //   console.log("Updated document in cache",sessionId, updatedContent);
+      
     }
-    r1.del(`document:${sessionId}`).then((result) => {
-      console.log(`Deleted document:${sessionId}`, result);
-    });
+    // r1.del(`document:${sessionId}`).then((result) => {
+   
+    // });
   }
 });

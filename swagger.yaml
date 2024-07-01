@@ -201,6 +201,16 @@
                         "message":
                           "type": "string"
                           "example": "Required"
+        "404":
+          "description": "Not found"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                    "example": "User not found"                  
         "500":
           "description": "Internal server error"
           "content":
@@ -293,7 +303,7 @@
                     "example": "Internal server error"
   "/auth/verify-token":
     "post":
-      "summary": "Verify JWT token [upcoming]"
+      "summary": "Verify JWT token"
       "tags":
         - "Auth"
       "description": "Verify JWT token and return user information."
@@ -320,7 +330,7 @@
                   "user":
                     "type": "object"
                     "properties":
-                      "id":
+                      "_id":
                         "type": "string"
                         "example": "clwrlc3qq0000dg3snp13r0yg"
                       "email":
@@ -408,11 +418,30 @@
               "schema":
                 "type": "object"
                 "properties":
-                  "acknowlwdged":
-                    "type": "boolean"
-                  "insertedId":
+                  "_id":
                     "type": "string"
-                    "example": "hdb1b3j1b12jb34j4j4"
+                    "example": "12m1j2k1j121j3jjjj3"
+                  "title":
+                    "type": "string"
+                    "example": "hello world"
+                  "body":
+                    "type": "string"
+                  "collaborators":
+                     "type": "array"
+                     "items":
+                        "type": "string"
+                        "example": "bhjsheuehdsasdasdasd"
+                  "createdAt":
+                    "type": "string"
+                    "format": "date"
+                    "example": "2024-06-28"
+                  "updatedAt":
+                    "type": "string"
+                    "format": "date"
+                    "example": "2024-06-28"
+                  "createdBy":
+                    "type": "string"
+                    "example": "sjsjajj2j3j22j3j3"
         "400":
           "description": "Bad Request"
           "content":
@@ -491,11 +520,11 @@
               "schema":
                 "type": "object"
                 "properties":
-                  "total":
+                  "totalContents":
                     "type": "integer"
-                  "page":
+                  "totalPages":
                     "type": "integer"
-                  "pageSize":
+                  "currentPage":
                     "type": "integer"
                   "contents":
                     "type": "array"
@@ -513,8 +542,9 @@
                           "example": "bhjsheueh3412j231231n"
                         "collaborators":
                           "type": "array"
-                          "example":
-                            - "bhjsheuehdsasdasdasd"
+                          "items":
+                              "type": "string"
+                              "example": "bhjsheuehdsasdasdasd"
                         "createdAt":
                           "type": "string"
                           "format": "date"
@@ -575,9 +605,10 @@
                   "body":
                     "type": "string"
                   "collaborators":
-                    "type": "array"
-                    "example":
-                      - "bhjsheuehdsasdasdasd"
+                     "type": "array"
+                     "items":
+                        "type": "string"
+                        "example": "bhjsheuehdsasdasdasd"
                   "createdAt":
                     "type": "string"
                     "format": "date"
@@ -633,9 +664,10 @@
                 "body":
                   "type": "string"
                 "collaborators":
-                  "type": "array"
-                  "example":
-                    - "bhjsheuehdsasdasdasd"
+                   "type": "array"
+                   "items":
+                      "type": "string"
+                      "example": "bhjsheuehdsasdasdasd"
       "responses":
         "200":
           "description": "Content updated successfully"
@@ -644,17 +676,30 @@
               "schema":
                 "type": "object"
                 "properties":
-                  "acknowlwdged":
-                    "type": "boolean"
-                  "updatedId":
+                  "_id":
                     "type": "string"
-                    "example": "hdb1b3j1b12jb34j4j4"
-                  "matchedCount":
-                    "type": "number"
-                    "example": 1
-                  "updatedCount":
-                    "type": "number"
-                    "example": 1
+                    "example": "12m1j2k1j121j3jjjj3"
+                  "title":
+                    "type": "string"
+                    "example": "hello world"
+                  "body":
+                    "type": "string"
+                  "collaborators":
+                     "type": "array"
+                     "items":
+                        "type": "string"
+                        "example": "bhjsheuehdsasdasdasd"
+                  "createdAt":
+                    "type": "string"
+                    "format": "date"
+                    "example": "2024-06-28"
+                  "updatedAt":
+                    "type": "string"
+                    "format": "date"
+                    "example": "2024-06-28"
+                  "createdBy":
+                    "type": "string"
+                    "example": "sjsjajj2j3j22j3j3"
         "400":
           "description": "Bad Request"
           "content":
@@ -798,7 +843,7 @@
                           "example": "bhjsheueh3412j231231n"
                         "body":
                           "type": "string"
-                        "content":
+                        "feedbackText":
                           "type": "string"
                           "example": "12m1j2k1j121j3jjjj3"
                         "createdAt":
@@ -836,6 +881,12 @@
         - "Feedback"
       "security":
         - "bearerAuth": []
+      "parameters":
+        - "name": "id"
+          "in": "path"
+          "required": true
+          "schema":
+            "type": "string"
       "requestBody":
         "required": true
         "content":
@@ -863,11 +914,25 @@
               "schema":
                 "type": "object"
                 "properties":
-                  "acknowlwdged":
-                    "type": "boolean"
-                  "insertedId":
+                  "_id":
                     "type": "string"
-                    "example": "hdb1b3j1b12jb34j4j4"
+                    "example": "12m1j2k1j121j3jjjj3"
+                  "user":
+                    "type": "string"
+                    "example": "bhjsheueh3412j231231n"
+                  "body":
+                    "type": "string"
+                  "feedbackText":
+                    "type": "string"
+                    "example": "12m1j2k1j121j3jjjj3"
+                  "createdAt":
+                    "type": "string"
+                    "format": "date"
+                    "example": "2024-06-28"
+                  "updatedAt":
+                    "type": "string"
+                    "format": "date"
+                    "example": "2024-06-28"
         "400":
           "description": "Bad Request"
           "content":
@@ -947,7 +1012,7 @@
                     "example": "bhjsheueh3412j231231n"
                   "body":
                     "type": "string"
-                  "content":
+                  "feedbackText":
                     "type": "string"
                     "example": "12m1j2k1j121j3jjjj3"
                   "createdAt":
@@ -1007,17 +1072,25 @@
               "schema":
                 "type": "object"
                 "properties":
-                  "acknowlwdged":
-                    "type": "boolean"
-                  "updatedId":
+                  "_id":
                     "type": "string"
-                    "example": "hdb1b3j1b12jb34j4j4"
-                  "matchedCount":
-                    "type": "number"
-                    "example": 1
-                  "updatedCount":
-                    "type": "number"
-                    "example": 1
+                    "example": "12m1j2k1j121j3jjjj3"
+                  "user":
+                    "type": "string"
+                    "example": "bhjsheueh3412j231231n"
+                  "body":
+                    "type": "string"
+                  "feedbackText":
+                    "type": "string"
+                    "example": "12m1j2k1j121j3jjjj3"
+                  "createdAt":
+                    "type": "string"
+                    "format": "date"
+                    "example": "2024-06-28"
+                  "updatedAt":
+                    "type": "string"
+                    "format": "date"
+                    "example": "2024-06-28"
         "400":
           "description": "Bad Request"
           "content":

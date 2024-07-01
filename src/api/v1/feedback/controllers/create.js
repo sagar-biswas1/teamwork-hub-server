@@ -21,9 +21,7 @@ const createFeedback = async (req, res) => {
 
     const newFeedback = await addFeedback(parsedBody.data);
 
-    res
-      .status(201)
-      .json({ message: "Feedback added successfully", feedback: newFeedback });
+    res.status(201).json(newFeedback);
   } catch (error) {
     console.error("Error adding feedback:", error);
     res.status(400).json({ message: "Error adding feedback", error });

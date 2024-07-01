@@ -20,9 +20,9 @@ const userLogin = async (req, res, next) => {
 
 		// check if the user exists
 		const user = await  findUserByEmail(parsedBody?.data?.email) ;
-        console.log(user)
+        
 		if (!user) {
-			return res.status(400).json({ message: 'Invalid credentials' });
+			return res.status(404).json({ message: 'User Not found' });
 		}
 
 		// compare password
@@ -37,7 +37,7 @@ const userLogin = async (req, res, next) => {
 				ipAddress,
 				attempt: 'FAILED',
 			});
-			return res.status(400).json({ message: 'Invalid credentials' });
+			return res.status(401).json({ message: 'Invalid credentials' });
 		}
 
 		// check if the user is verified
@@ -64,7 +64,7 @@ const userLogin = async (req, res, next) => {
 			});
 		}
 
-		console.log("JWT_SECRET", process.env.JWT_SECRET)
+	
 		// generate access token
 		const accessToken = jwt.sign(
 			{ userId: user._id, email: user.email, name: user.name, role: user.role },
@@ -83,7 +83,6 @@ const userLogin = async (req, res, next) => {
 			accessToken,
 		});
 	} catch (error) {
-		console.log("hhhhhhhhhhh---<",error)
 		next(error);
 	}
 };

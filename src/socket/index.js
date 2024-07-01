@@ -16,8 +16,6 @@ const rooms = {};
  */
 function setupSocket(io) {
   io.on("connection", (socket) => {
-    console.log("a user connected");
-
     socket.on("getDocumentId", async (documentId) => {
       //setting session in redis
       await setSessionInRedis(documentId);
@@ -39,7 +37,6 @@ function setupSocket(io) {
       // socket.emit("loadDocument", data);
 
       const userId = socket.handshake.query.userId;
-      console.log("userId", userId);
 
       if (!rooms[documentId]) {
         rooms[documentId] = new Set();
@@ -91,7 +88,6 @@ function setupSocket(io) {
  * @param {Object} io - The Socket.IO server instance.
  */
 function handleUserDisconnect(socket, documentId, userId, io) {
-  console.log("user disconnected", userId);
   socket.leave(documentId);
 
   if (rooms[documentId]) {
@@ -129,12 +125,14 @@ async function handleDocumentEdited(
     contentDoc = await contentService.findById(documentId);
   }
 
-  contentDoc.body = code;
-  collaborators.forEach((collaborator) => {
-    if (!contentDoc.collaborators.includes(collaborator)) {
-      contentDoc.collaborators.push(collaborator);
-    }
-  });
+  if (contentDoc) {
+    contentDoc.body = code;
+    collaborators.forEach((collaborator) => {
+      if (!contentDoc?.collaborators?.includes(collaborator)) {
+        contentDoc?.collaborators?.push(collaborator);
+      }
+    });
+  }
 
   // const updatedContent = await contentService.updateById(documentId, {
   //   body: code,

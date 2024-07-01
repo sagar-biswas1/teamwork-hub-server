@@ -42,7 +42,7 @@ app.get("/api/v1/health", (req, res) => {
 // Error handling middleware
 // app.use(errorLogger);
 app.use((err, _req, res, _next) => {
-  console.log(err);
+  console.log(err.status, typeof err.message);
   // appLogger.error(JSON.stringify(err));
   res.status(err.status || 500).json({
     message: err.message,

@@ -25,13 +25,8 @@ const create = async (req, res, next) => {
       ...parsedBody.data,
     });
 
-    // Respond with success message and created content data
-    const response = {
-      code: 201,
-      message: "Content created successfully",
-      data: content,
-    };
-    res.status(201).json(response);
+    
+    return res.status(201).json(content);
   } catch (err) {
     console.error("Error creating content:", err);
     next(err);

@@ -51,7 +51,7 @@ const updateById = async (id, feedbackData) => {
       new: true,
       runValidators: true,
     });
-    console.log({ updatedFeedback });
+
     // Return the updated content or null if not found
     return updatedFeedback;
   } catch (error) {
@@ -140,7 +140,7 @@ const findFeedbacksByContentID = async (
   try {
     // Calculate the number of documents to skip based on the page and limit
     const skip = (page - 1) * limit;
-    console.log({ skip: skip, limit: limit });
+  
     // Fetch feedback from the database with pagination and populate the user field
     const feedback = await Feedback.find({ content: contentId })
       .populate({ path: "user", select: "name" })

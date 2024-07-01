@@ -28,7 +28,9 @@ const updateContentById = async (req, res) => {
     // Update content in the database by ID
     const updatedContent = await updateById(id, parsedBody.data);
 
-    // Return the updated content
+    if(!updatedContent){
+      return res.status(404).json({ "message": "Document not found" });
+    }
     res.status(200).json(updatedContent);
   } catch (error) {
     console.error("Error updating content:", error);
