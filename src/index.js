@@ -11,7 +11,7 @@ const port = process.env.PORT || 4000;
 
 const io = new SocketIOServer(server,{
   cors: {
-    origin: ["http://localhost:5173"],
+    origin: [process.env.ClIENT_SIDE_URL],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   },
